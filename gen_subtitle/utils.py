@@ -16,7 +16,7 @@ def run(cmd: Sequence[str]) -> None:
     print(f"$ {printable}", file=sys.stderr)
     completed = subprocess.run(cmd)
     if completed.returncode != 0:
-        raise CliError(f"コマンドが失敗しました: {printable}")
+        raise CliError(f"Command failed: {printable}")
 
 
 def shlex_quote(text: str) -> str:
@@ -34,7 +34,7 @@ def normalize_timestamp(text: str) -> str:
     if len(parts) == 3:
         hours, minutes, sec_ms = parts
         return f"{int(hours):02d}:{int(minutes):02d}:{sec_ms}"
-    raise CliError(f"不正な時刻形式です: {text}")
+    raise CliError(f"Invalid timestamp format: {text}")
 
 
 def clean_subtitle_text(text: str) -> str:

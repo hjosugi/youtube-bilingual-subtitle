@@ -14,7 +14,7 @@ class DeepLTranslator(Translator):
     def __init__(self, auth_key: str):
         if not auth_key:
             raise CliError(
-                "DeepL を使うには --deepl-auth-key または DEEPL_AUTH_KEY が必要です"
+                "DEEPL_AUTH_KEY is required to use DeepL"
             )
         import deepl
 
@@ -51,7 +51,7 @@ class ArgosTranslator(Translator):
             return
 
         print(
-            f"Argos の翻訳モデル {self.from_code}->{self.to_code} を取得します...",
+            f"Fetching Argos translation model {self.from_code}->{self.to_code}...",
             file=sys.stderr,
         )
         import argostranslate.package
@@ -68,7 +68,7 @@ class ArgosTranslator(Translator):
         )
         if package_to_install is None:
             raise CliError(
-                f"Argos の翻訳モデル {self.from_code}->{self.to_code} が見つかりません"
+                f"Argos translation model {self.from_code}->{self.to_code} not found"
             )
         download_path = package_to_install.download()
         argostranslate.package.install_from_path(download_path)
@@ -80,7 +80,7 @@ class ArgosTranslator(Translator):
         )
         if translation is None:
             raise CliError(
-                f"Argos の翻訳モデル {self.from_code}->{self.to_code} の初期化に失敗しました"
+                f"Failed to initialize Argos translation model {self.from_code}->{self.to_code}"
             )
 
     def translate_many(self, texts: Sequence[str]) -> list[str]:
@@ -99,7 +99,7 @@ def make_translator(name: str, deepl_auth_key: str) -> Translator:
         return DeepLTranslator(deepl_auth_key)
     if name == "argos":
         return ArgosTranslator("en", "ja")
-    raise CliError(f"未対応 translator: {name}")
+    raise CliError(f"Unsupported translator: {name}")
 
 
 def translate_rows(
@@ -111,7 +111,7 @@ def translate_rows(
         translated.extend(translator.translate_many(chunk))
     if len(translated) != len(rows):
         raise CliError(
-            f"翻訳件数が一致しませんでした: input={len(rows)} output={len(translated)}"
+            f"Translation count mismatch: input={len(rows)} output={len(translated)}"
         )
     for row, ja in zip(rows, translated):
         row.ja = ja.strip()

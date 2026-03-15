@@ -16,36 +16,36 @@ from gen_subtitle.youtube import download_subtitles
 def parse_args() -> argparse.Namespace:
     load_dotenv()
     parser = argparse.ArgumentParser(
-        description="YouTube 英語字幕を取得して、日英対訳 TSV / SRT / Markdown を作る"
+        description="Download YouTube English subtitles and create bilingual TSV / SRT / Markdown files."
     )
     parser.add_argument("url", help="YouTube URL")
     parser.add_argument(
         "--translator",
         choices=("argos", "deepl"),
         default="argos",
-        help="日本語訳の生成に使う翻訳エンジン。既定値は argos",
+        help="Translation engine to generate Japanese text. Default: argos",
     )
     parser.add_argument(
         "--deepl-auth-key",
         default=os.environ.get("DEEPL_AUTH_KEY", ""),
-        help="DeepL API key。未指定時は DEEPL_AUTH_KEY を使う",
+        help="DeepL API key. Uses DEEPL_AUTH_KEY environment variable or .env if not specified.",
     )
     parser.add_argument(
         "--out-dir",
         default="out",
-        help="出力先ディレクトリ。既定値: out",
+        help="Output directory. Default: out",
     )
     parser.add_argument(
         "-n",
         "--output-name",
         default="",
-        help="出力ファイルのベース名。指定しない場合は動画ID等から自動決定します",
+        help="Base name for the output files. Automatically determined from video ID if not specified.",
     )
     parser.add_argument(
         "--batch-size",
         type=int,
         default=50,
-        help="翻訳をまとめる件数。既定値: 50",
+        help="Number of lines to batch for translation. Default: 50",
     )
     return parser.parse_args()
 
@@ -53,7 +53,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     if args.batch_size <= 0:
-        raise CliError("--batch-size は 1 以上にしてください")
+        raise CliError("--batch-size must be 1 or greater")
 
     out_dir = Path(args.out_dir).resolve()
     subtitle_path = download_subtitles(args.url, out_dir)
@@ -75,10 +75,10 @@ def main() -> int:
     try:
         subtitle_path.unlink()
     except OSError as e:
-        print(f"警告: 中間字幕ファイルの削除に失敗しました ({subtitle_path}): {e}", file=sys.stderr)
+        print(f"Warning: Failed to delete intermediate subtitle file ({subtitle_path}): {e}", file=sys.stderr)
 
-    print("完了")
-    print(f"削除済 字幕: {subtitle_path}")
+    print("Done")
+    print(f"Deleted Subs : {subtitle_path}")
     print(f"TSV : {tsv_path}")
     print(f"MD  : {md_path}")
     print(f"SRT : {srt_path}")

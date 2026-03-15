@@ -14,7 +14,7 @@ def choose_yt_dlp_command() -> list[str]:
     if shutil.which("uv"):
         return ["uv", "tool", "run", "yt-dlp"]
     raise CliError(
-        "yt-dlp が見つかりません。`uv tool install yt-dlp` か `pipx install yt-dlp` などで入れてください"
+        "yt-dlp not found. Please install it using `uv tool install yt-dlp` or `pipx install yt-dlp`"
     )
 
 
@@ -45,5 +45,5 @@ def download_subtitles(url: str, out_dir: Path) -> Path:
         reverse=True,
     )
     if not candidates:
-        raise CliError("字幕ファイルが見つかりませんでした。英語字幕がない動画かもしれません")
+        raise CliError("Subtitle file not found. The video might not have English subtitles.")
     return candidates[0]

@@ -89,7 +89,7 @@ def parse_subtitle_file(path: Path) -> list[SubtitleRow]:
     elif suffix == ".vtt":
         rows = parse_vtt(path)
     else:
-        raise CliError(f"未対応の字幕形式です: {path.suffix}")
+        raise CliError(f"Unsupported subtitle format: {path.suffix}")
     if not rows:
-        raise CliError(f"字幕解析結果が空でした: {path}")
+        raise CliError(f"Subtitle parsing resulted in empty output: {path}")
     return rows
