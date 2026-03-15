@@ -63,9 +63,9 @@ def main() -> int:
 
     stem = args.output_name if args.output_name else base_stem(subtitle_path)
     
-    tsv_path = out_dir / f"{stem}.bilingual.tsv"
-    md_path = out_dir / f"{stem}.study.md"
-    srt_path = out_dir / f"{stem}.bilingual.srt"
+    tsv_path = out_dir / f"{stem}.tsv"
+    md_path = out_dir / f"{stem}.md"
+    srt_path = out_dir / f"{stem}.srt"
 
     write_tsv(rows, tsv_path)
     write_study_md(rows, md_path)
@@ -78,10 +78,6 @@ def main() -> int:
         print(f"Warning: Failed to delete intermediate subtitle file ({subtitle_path}): {e}", file=sys.stderr)
 
     print("Done")
-    print(f"Deleted Subs : {subtitle_path}")
-    print(f"TSV : {tsv_path}")
-    print(f"MD  : {md_path}")
-    print(f"SRT : {srt_path}")
     return 0
 
 

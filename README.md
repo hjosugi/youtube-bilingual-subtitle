@@ -65,8 +65,8 @@ options:
 
 By default, the script downloads English subtitles for the provided YouTube URL, generates Japanese translations using the free [Argos Translate](https://github.com/argosopentech/argos-translate) model, and outputs the following files in the `out` directory:
 
-1. **`.bilingual.tsv`**: Tab-separated data containing the translation results.
-2. **`.bilingual.srt`**: Bilingual subtitle (SRT) format for video players.
-3. **`.study.md`**: Formatted Markdown file containing side-by-side translations for language study.
+1. **`.tsv`**: Tab-separated data containing the translation results.
+2. **`.srt`**: Bilingual subtitle (SRT) format for video players.
+3. **`.md`**: Formatted Markdown file containing side-by-side translations for language study.
 
 (After successful completion, the original subtitle file downloaded by `yt-dlp` is automatically deleted.)
