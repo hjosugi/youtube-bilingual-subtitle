@@ -46,6 +46,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Skip translation and output English only.",
     )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=100,
+        help="Number of rows to process in a single batch. Default: 50",
+    )
     return parser.parse_args()
 
 
@@ -57,13 +63,13 @@ def main() -> int:
     out_dir = Path(args.out_dir).resolve()
     subtitle_path = download_subtitles(args.url, out_dir)
     rows = parse_subtitle_file(subtitle_path)
-    
+
     if not args.en_only:
         translator = make_translator(args.translator, args.deepl_auth_key)
         translate_rows(rows, translator, args.batch_size)
 
     stem = args.output_name if args.output_name else base_stem(subtitle_path)
-    
+
     tsv_path = out_dir / f"{stem}.tsv"
     md_path = out_dir / f"{stem}.md"
     srt_path = out_dir / f"{stem}.srt"
@@ -76,7 +82,10 @@ def main() -> int:
     try:
         subtitle_path.unlink()
     except OSError as e:
-        print(f"Warning: Failed to delete intermediate subtitle file ({subtitle_path}): {e}", file=sys.stderr)
+        print(
+            f"Warning: Failed to delete intermediate subtitle file ({subtitle_path}): {e}",
+            file=sys.stderr,
+        )
 
     print("Done")
     return 0
