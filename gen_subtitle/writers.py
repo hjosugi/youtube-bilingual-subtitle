@@ -17,7 +17,9 @@ def write_study_md(rows: list[SubtitleRow], path: Path) -> None:
         for i, row in enumerate(rows, start=1):
             f.write(f"## {i}\n")
             f.write(f"EN: {row.en}\n")
-            f.write(f"JA: {row.ja}\n\n")
+            if row.ja:
+                f.write(f"JA: {row.ja}\n")
+            f.write("\n")
 
 
 def write_bilingual_srt(rows: list[SubtitleRow], path: Path) -> None:

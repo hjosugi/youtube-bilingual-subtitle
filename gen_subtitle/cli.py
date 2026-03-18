@@ -42,10 +42,9 @@ def parse_args() -> argparse.Namespace:
         help="Base name for the output files. Automatically determined from video ID if not specified.",
     )
     parser.add_argument(
-        "--batch-size",
-        type=int,
-        default=50,
-        help="Number of lines to batch for translation. Default: 50",
+        "--en-only",
+        action="store_true",
+        help="Skip translation and output English only.",
     )
     return parser.parse_args()
 
@@ -58,8 +57,10 @@ def main() -> int:
     out_dir = Path(args.out_dir).resolve()
     subtitle_path = download_subtitles(args.url, out_dir)
     rows = parse_subtitle_file(subtitle_path)
-    translator = make_translator(args.translator, args.deepl_auth_key)
-    translate_rows(rows, translator, args.batch_size)
+    
+    if not args.en_only:
+        translator = make_translator(args.translator, args.deepl_auth_key)
+        translate_rows(rows, translator, args.batch_size)
 
     stem = args.output_name if args.output_name else base_stem(subtitle_path)
     
